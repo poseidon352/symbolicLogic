@@ -51,6 +51,9 @@
         "locale": "cpp",
         "mutex": "cpp",
         "print": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "iostream": "cpp",
+        "__threading_support": "cpp",
+        "exception": "cpp"
     }
 }
