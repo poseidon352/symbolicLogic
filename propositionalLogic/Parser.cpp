@@ -64,12 +64,12 @@ std::queue<std::string> Parser::infixToRpn() {
         } else if (expr[i] == '(') {
             opStack.push(std::string(1, expr[i]));
         } else if (expr[i] == ')') {
-            while (opStack.top() != "(") {
-                assert(!opStack.empty() && "Mismatched parentheses found");
+            while (!opStack.empty() && opStack.top() != "(") {
                 // Pop operators from opStack into rpn queue
                 rpn.push(opStack.top());
                 opStack.pop();
             }
+            assert(!opStack.empty() && "Mismatched parentheses found");
             // There should now be a left parenthesis at the top of the opStack
             assert(opStack.top() == "(" && "Mismatched parentheses found");
             // Pop the left parenthesis from the opStack and discard it

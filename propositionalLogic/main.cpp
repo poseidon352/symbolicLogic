@@ -4,7 +4,7 @@
 #include <iostream>
 
 int main() {
-    std::string expression = "~~D";
+    std::string expression = "~~(A & ~~(C | D))";
     
     // Parse the expression into an AST
     Parser parser(expression);
