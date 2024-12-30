@@ -4,7 +4,7 @@
 #include <iostream>
 
 int main() {
-    std::string expression = "~(A & B) | C";
+    std::string expression = "C & ~~D";
     
     // Parse the expression into an AST
     Parser parser(expression);
@@ -13,6 +13,6 @@ int main() {
     // Print the AST
     std::cout << "AST for expression: " << expression << std::endl;
     root->print();
-    std::cout << endl;
+    std::cout << std::endl;
     return 0;
 }

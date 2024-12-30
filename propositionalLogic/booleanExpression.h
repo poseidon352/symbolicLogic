@@ -38,7 +38,7 @@ public:
      * 
      * @param expression String representation of expression
      */
-    booleanExpression(string &expression);
+    booleanExpression(std::string &expression);
 
 
 private:

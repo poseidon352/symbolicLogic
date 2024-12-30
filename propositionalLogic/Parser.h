@@ -5,8 +5,6 @@
 #include <queue>
 #include "Node.h"
 
-using namespace std;
-
 class Parser {
 public:
 
@@ -18,22 +16,58 @@ public:
      * All other valid symbol (&, |, ->, <->) represents the other 
      * operators, which have non-NULL children.
      * 
-     * @param expression String representation of expression
+     * @param expression String representation of expression.
      */
-    Parser(const string &expression);
+    Parser(const std::string &expression);
 
-    // Parse the expression into an AST
+    /**
+     * @return Root of the Abstract Syntax Tree (AST) produced
+     */
     Node* parse();
 
 private:
-    string expr;       // Input Boolean expression
+    std::string expr;       // Input propositional logic expression
 
-    string removeAllWhitespace(const string& str);
-    queue<string> infixToRpn();
+    /**
+     * @return Copy of input string with all whitespace removed.
+     */
+    std::string removeAllWhitespace(const std::string& str);
+
+    /**
+     * Converts string representation of expression from infix notation
+     * to Reverse Polish Notation using the Shunting Yard Algorithm.
+     * @return Queue of string representation of symbols in rpn format.
+     */
+    std::queue<std::string> infixToRpn();
+
+    /**
+     * @param index Index of the beginning of the desired operator in expr.
+     * @return Number of characters in the string of the operator, if not 
+     * a valid operator then returns -1.
+     */
     int operatorSize(int index);
-    bool hasLeftAssociativity(string &op);
-    int getPrecedence(string &op);
-    Node* rpnToExpr(queue<string> &queue);
+
+    /**
+     * @param op String of a propositional logic operator.
+     * @return Whether or not the operator has left associativity.
+     */
+    bool hasLeftAssociativity(std::string &op);
+
+    /**
+     * If parentheses are not present to seperate operators then
+     * the expression is parsed according to each operator's precedence.
+     * @param op String of a propositional logic operator.
+     * @return Integer representing the operator's priority when parsed.
+     */
+    int getPrecedence(std::string &op);
+
+    /**
+     * @todo Write description of function
+     * 
+     * @param queue Queue of string representation of symbols in rpn format.
+     * @return Root of the AST produced original input string.
+     */
+    Node* rpnToExpr(std::queue<std::string> &queue);
 };
 
 #endif

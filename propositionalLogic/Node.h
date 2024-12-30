@@ -3,9 +3,8 @@
 
 #include <string>
 #include <unordered_map>
-using namespace std;
 
-// Enum for Boolean operators
+// Enum for propositional logic types
 enum Type {
     NOT,
     AND,
@@ -19,16 +18,20 @@ enum Type {
 
 class Node {
 public:
-    Type type; 
-    string value;
-    Node* parent;
-    Node* left;                          // Left child (nullptr for variables)
-    Node* right;                         // Right child (nullptr for variables or NOT)
+    Type type;                           // Propositional logic type
+    std::string value;                   // String representation of Node
+    Node* parent;                        // Ancestor (nullptr for root of AST)
+    Node* left;                          // Left child (nullptr for VAR, NOT, TRUE and FALSE)
+    Node* right;                         // Right child (nullptr for VAR, TRUE and FALSE)
 
     // Constructors
-    Node(const string& var);
-    Node(const string& var, Node* lhs, Node* rhs);
+    Node(const std::string& var);
+    Node(const std::string& var, Node* parent, Node* lhs, Node* rhs);
 
+    /**
+     * Print the value stored in this node and all of its children,
+     * adding parentheses and spacing when need for clarity and correctness.
+     */
     void print();
 };
 

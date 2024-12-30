@@ -2,11 +2,10 @@
 #include <exception>
 #include <iostream>
 #include "Node.h"
-using namespace std;
 
-class InvalidSymbolException : public exception {
+class InvalidSymbolException : public std::exception {
 private:
-    string message;
+    std::string message;
 
 public:
     InvalidSymbolException(const char* msg) : message(msg) {}
@@ -16,7 +15,7 @@ public:
     }
 };
 
-Node::Node(const string& var): value(var), parent(nullptr), left(nullptr), right(nullptr) {
+Node::Node(const std::string& var): value(var), parent(nullptr), left(nullptr), right(nullptr) {
     if (var == "~") {
         type = NOT;
     } else if (var == "&") {
@@ -34,7 +33,7 @@ Node::Node(const string& var): value(var), parent(nullptr), left(nullptr), right
     }
 }
 
-Node::Node(const string& var, Node* lhs, Node* rhs): value(var), left(lhs), right(rhs) {
+Node::Node(const std::string& var, Node* parent, Node* lhs, Node* rhs): value(var), parent(parent), left(lhs), right(rhs) {
     if (var == "~") {
         type = NOT;
     } else if (var == "&") {
@@ -53,21 +52,23 @@ Node::Node(const string& var, Node* lhs, Node* rhs): value(var), left(lhs), righ
 }
 
 void Node::print() {
+    // Parentheses are not added if Node has NOT or VAR type or has
+    // no parent (is the root of the Abstract Syntax Tree)
     bool addParens = (type != NOT && type != VAR) && parent;
-    // bool addParens = type != VAR && parent;
     // Print opening parenthesis if needed
-    if (addParens) cout << "(";
+    if (addParens) std::cout << "(";
 
     if (left) {
         left->print();
-        cout << " ";
+        std::cout << " ";
     }
-    cout << value;
+    std::cout << value;
     if (right) {
-        if (type != NOT) cout << " ";
+        // Spacing not added for NOT type for easier readability
+        if (type != NOT) std::cout << " ";
         right->print();
     }
     // Print closing parenthesis if needed
-    if (addParens) cout << ")";
+    if (addParens) std::cout << ")";
 }
 
