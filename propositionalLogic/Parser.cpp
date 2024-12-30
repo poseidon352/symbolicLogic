@@ -44,10 +44,6 @@ int Parser::getPrecedence(std::string &op) {
     }
 }
 
-/**
- * @todo Fix incorrect parsing, ex. C & ~~D parses as ~C & ~D. 
- * Also ~~D segfaults.
- */
 std::queue<std::string> Parser::infixToRpn() {
     assert((operatorSize(0) == -1 || expr[0] == '~') && 
         "Invalid Syntax (invalid operator at start of expression)");
@@ -84,7 +80,7 @@ std::queue<std::string> Parser::infixToRpn() {
             int precedence = getPrecedence(op);
 
             while (!opStack.empty() && opStack.top() != "(" && 
-            ((getPrecedence(opStack.top()) >= precedence) || 
+            ((getPrecedence(opStack.top()) > precedence) || 
             (getPrecedence(opStack.top()) == precedence && hasLeftAssociativity(op)))) {
                 // Pop operators from opStack into output queue
                 rpn.push(opStack.top());
