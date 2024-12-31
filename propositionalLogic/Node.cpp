@@ -34,7 +34,7 @@ Node::Node(const std::string& var): value(var), parent(nullptr), left(nullptr), 
     }
 }
 
-void Node::print() {
+void Node::print() const {
     // Parentheses are not added if Node has NOT or VAR type or has
     // no parent (is the root of the Abstract Syntax Tree)
     bool addParens = (type != NOT && type != VAR) && parent;
@@ -56,13 +56,13 @@ void Node::print() {
 }
 
 
-bool Node::evaluateVariable(std::map<char, bool> vars) {
+bool Node::evaluateVariable(const std::map<char, bool>& vars) const {
     assert(vars.contains(value[0]) && 
-            "Variable not in hashmap");
+            "Variable not in given map");
     return vars.at(value[0]);
 }
 
-bool Node::evaluateOperator(std::map<char, bool> vars) {
+bool Node::evaluateOperator(const std::map<char, bool>& vars) const {
     switch (type) {
         case NOT:
             return !right->evaluate(vars);
@@ -75,16 +75,11 @@ bool Node::evaluateOperator(std::map<char, bool> vars) {
         case BICON:
             return (!left->evaluate(vars) || right->evaluate(vars)) &&
                    (!right->evaluate(vars) || left->evaluate(vars));
-        default: return false;
+        default: throw InvalidSymbolException("Invalid symbol detected");
     }
 }
 
-bool Node::evaluate(std::map<char, bool> vars) {
-    if (type == TRUE) return true;
-    if (type == FALSE) return false;
-
-    if (type == VAR) {
-        return evaluateVariable(vars);
-    }
+bool Node::evaluate(const std::map<char, bool>& vars) const {
+    if (type == VAR) return evaluateVariable(vars);
     return evaluateOperator(vars);
 }

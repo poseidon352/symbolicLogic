@@ -12,9 +12,7 @@ enum Type {
     OR,
     CON,
     BICON,
-    VAR,
-    TRUE,
-    FALSE
+    VAR
 };
 
 class Node {
@@ -22,8 +20,8 @@ public:
     Type type;                           // Propositional logic type
     std::string value;                   // String representation of Node
     Node* parent;                        // Ancestor (nullptr for root of AST)
-    Node* left;                          // Left child (nullptr for VAR, NOT, TRUE and FALSE)
-    Node* right;                         // Right child (nullptr for VAR, TRUE and FALSE)
+    Node* left;                          // Left child (nullptr for VAR, NOT)
+    Node* right;                         // Right child (nullptr for VAR)
 
     // Node Constructor
     Node(const std::string& var);
@@ -41,29 +39,17 @@ public:
      * Print the value stored in this node and all of its children,
      * adding parentheses and spacing when need for clarity and correctness.
      */
-    void print();
+    void print() const;
 
     /**
      * @todo Add documentation for evaluate methods
      */
-    bool evaluate(std::map<char, bool> vars);
+    bool evaluate(const std::map<char, bool>& vars) const;
 
 private:
-    bool evaluateVariable(std::map<char, bool> vars);
-    bool evaluateOperator(std::map<char, bool> vars);
+    bool evaluateVariable(const std::map<char, bool>& vars) const;
+    bool evaluateOperator(const std::map<char, bool>& vars) const;
 
-    /**
-     * Destroys all dynamically allocated memory associated with the
-     * current Node class.
-     * Helper function for Node destructor.
-     */
-    void clear();
-
-    /**
-     * Copies the parameter other Node into the current quadtree.
-     * Helper function for Node copy constructor
-     */
-    void copy(const Node& other);
 };
 
 #endif
