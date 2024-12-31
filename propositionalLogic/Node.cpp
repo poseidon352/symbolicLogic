@@ -1,6 +1,7 @@
 
 #include <exception>
 #include <iostream>
+#include <cassert>
 #include "Node.h"
 
 class InvalidSymbolException : public std::exception {
@@ -72,3 +73,34 @@ void Node::print() {
     if (addParens) std::cout << ")";
 }
 
+
+bool Node::evaluateVariable(std::map<char, bool> vars) {
+    return vars.at(value[0]);
+}
+
+bool Node::evaluateOperator(std::map<char, bool> vars) {
+    switch (type) {
+        case NOT:
+            return !right->evaluate(vars);
+        case AND:
+            return left->evaluate(vars) && right->evaluate(vars);
+        case OR:
+            return left->evaluate(vars) || right->evaluate(vars);
+        case CON:
+            return !left->evaluate(vars) || right->evaluate(vars);
+        case BICON:
+            return (!left->evaluate(vars) || right->evaluate(vars)) &&
+                   (!right->evaluate(vars) || left->evaluate(vars));
+    }
+    return false;
+}
+
+bool Node::evaluate(std::map<char, bool> vars) {
+    if (type == TRUE) return true;
+    if (type == FALSE) return false;
+
+    if (type == VAR) {
+        return evaluateVariable(vars);
+    }
+    return evaluateOperator(vars);
+}

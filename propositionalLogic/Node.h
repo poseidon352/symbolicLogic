@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <map>
 
 // Enum for propositional logic types
 enum Type {
@@ -33,6 +34,12 @@ public:
      * adding parentheses and spacing when need for clarity and correctness.
      */
     void print();
+
+    bool evaluate(std::map<char, bool> vars);
+
+private:
+    bool evaluateVariable(std::map<char, bool> vars);
+    bool evaluateOperator(std::map<char, bool> vars);
 };
 
 #endif
