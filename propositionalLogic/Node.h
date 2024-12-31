@@ -25,9 +25,17 @@ public:
     Node* left;                          // Left child (nullptr for VAR, NOT, TRUE and FALSE)
     Node* right;                         // Right child (nullptr for VAR, TRUE and FALSE)
 
-    // Constructors
+    // Node Constructor
     Node(const std::string& var);
-    Node(const std::string& var, Node* parent, Node* lhs, Node* rhs);
+    
+    // Node destructor
+    ~Node();
+
+    // Node copy constructor
+    Node(const Node& other);
+
+    // Node assignment operator
+    Node& operator=(const Node& rhs);
 
     /**
      * Print the value stored in this node and all of its children,
@@ -35,11 +43,27 @@ public:
      */
     void print();
 
+    /**
+     * @todo Add documentation for evaluate methods
+     */
     bool evaluate(std::map<char, bool> vars);
 
 private:
     bool evaluateVariable(std::map<char, bool> vars);
     bool evaluateOperator(std::map<char, bool> vars);
+
+    /**
+     * Destroys all dynamically allocated memory associated with the
+     * current Node class.
+     * Helper function for Node destructor.
+     */
+    void clear();
+
+    /**
+     * Copies the parameter other Node into the current quadtree.
+     * Helper function for Node copy constructor
+     */
+    void copy(const Node& other);
 };
 
 #endif

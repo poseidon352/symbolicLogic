@@ -34,24 +34,6 @@ Node::Node(const std::string& var): value(var), parent(nullptr), left(nullptr), 
     }
 }
 
-Node::Node(const std::string& var, Node* parent, Node* lhs, Node* rhs): value(var), parent(parent), left(lhs), right(rhs) {
-    if (var == "~") {
-        type = NOT;
-    } else if (var == "&") {
-        type = AND;
-    } else if (var == "|") {
-        type = OR;
-    } else if (var == "->") {
-        type = CON;
-    } else if (var == "<->") {
-        type = BICON;
-    } else if (var.length() == 1 && isalpha(var[0])) {
-        type = VAR;
-    } else {
-        throw InvalidSymbolException("Invalid symbol detected");
-    }
-}
-
 void Node::print() {
     // Parentheses are not added if Node has NOT or VAR type or has
     // no parent (is the root of the Abstract Syntax Tree)
