@@ -52,6 +52,8 @@
         "mutex": "cpp",
         "print": "cpp",
         "algorithm": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "__tree": "cpp",
+        "map": "cpp"
     }
 }

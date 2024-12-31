@@ -75,6 +75,8 @@ void Node::print() {
 
 
 bool Node::evaluateVariable(std::map<char, bool> vars) {
+    assert(vars.contains(value[0]) && 
+            "Variable not in hashmap");
     return vars.at(value[0]);
 }
 
@@ -91,8 +93,8 @@ bool Node::evaluateOperator(std::map<char, bool> vars) {
         case BICON:
             return (!left->evaluate(vars) || right->evaluate(vars)) &&
                    (!right->evaluate(vars) || left->evaluate(vars));
+        default: return false;
     }
-    return false;
 }
 
 bool Node::evaluate(std::map<char, bool> vars) {

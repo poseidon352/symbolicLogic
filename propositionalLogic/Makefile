@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++20 -Wall
 LDFLAGS =
 
 SRC = Parser.cpp Node.cpp main.cpp
