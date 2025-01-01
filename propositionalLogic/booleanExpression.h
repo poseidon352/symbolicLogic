@@ -9,6 +9,19 @@ class booleanExpression {
 public:
 
     /**
+     * Constructor that builds a booleanExpression from a given string.
+     * Ignoring whitespace, every symbol becomes a Node in the tree.
+     * A capital letter represents a VAR, which is a leaf Node.
+     * A ~ represents the NOT operator, whose right child is NULL.
+     * All other valid symbol (&, |, ->, <->)represents the other 
+     * operators, which have non-NULL children.
+     * 
+     * @param expression String representation of expression
+     */
+    booleanExpression(std::string &expression);
+
+
+    /**
      * Copy constructor for a booleanExpression.
      *
      * @param other The booleanExpression we are copying.
@@ -27,24 +40,31 @@ public:
      */
     booleanExpression& operator=(const booleanExpression& rhs);
 
-
-    /**
-     * Constructor that builds a booleanExpression from a given string.
-     * Ignoring whitespace, every symbol becomes a Node in the tree.
-     * A capital letter represents a VAR, which is a leaf Node.
-     * A ~ represents the NOT operator, whose right child is NULL.
-     * All other valid symbol (&, |, ->, <->)represents the other 
-     * operators, which have non-NULL children.
-     * 
-     * @param expression String representation of expression
-     */
-    booleanExpression(std::string &expression);
-
-
 private:
-
     // Root of the Abstract Syntax Tree
     Node* root;
+
+    /**
+     * Copies the parameter other quadtree into the current booleanExpression.
+     * Called by copy constructor and operator=.
+     * @param other The booleanExpression to be copied.
+     */
+    void copy(const booleanExpression& other);
+
+    /**
+     * Private helper function for copy. Recursively copies
+     * all of other data into new booleanExpression
+     * @param other Node to copy.
+     * @param parent parent of the Node to copy
+     * @return Copied Node
+     **/
+    Node* copyNode(const Node* other, Node* parent);
+
+    /**
+     * Destroys all dynamically allocated memory associated with the
+     * current booleanExpression.
+     */
+    void clear(Node* &node);
 };
 
 
