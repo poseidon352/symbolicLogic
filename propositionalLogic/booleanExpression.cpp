@@ -50,3 +50,6 @@ booleanExpression& booleanExpression::operator=(const booleanExpression& rhs) {
     return *this;
 }
 
+bool booleanExpression::evaluate(const std::map<char, bool>& vars) const{
+    return root->evaluate(vars);
+}

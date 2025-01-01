@@ -40,6 +40,11 @@ public:
      */
     booleanExpression& operator=(const booleanExpression& rhs);
 
+    /**
+     * 
+     */
+    bool evaluate(const std::map<char, bool>& vars) const;
+
 private:
     // Root of the Abstract Syntax Tree
     Node* root;
