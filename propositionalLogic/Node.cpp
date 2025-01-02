@@ -34,6 +34,12 @@ Node::Node(const std::string& var): value(var), parent(nullptr), left(nullptr), 
     }
 }
 
+Node::~Node() {
+    delete left;
+    delete right;
+}
+
+
 void Node::print() const {
     // Parentheses are not added if Node has NOT or VAR type or has
     // no parent (is the root of the Abstract Syntax Tree)

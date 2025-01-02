@@ -35,20 +35,13 @@ Node* booleanExpression::copyNode(const Node* node, Node* parent) {
 
 
 booleanExpression::~booleanExpression() {
-    clear(root);
-}
-
-void booleanExpression::clear(Node* &node) {
-    if (!node) return;
-    clear(node->left);
-    clear(node->right);
-    delete node;
+    delete root;
 }
 
 
 booleanExpression& booleanExpression::operator=(const booleanExpression& rhs) {
     if (this != &rhs) {
-        clear(root);
+        delete root;
         copy(rhs);
     }
     return *this;

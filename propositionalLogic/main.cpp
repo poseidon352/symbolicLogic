@@ -1,18 +1,19 @@
 
-#include "Parser.h"
-#include "Node.h"
+#include "booleanExpression.h"
 #include <iostream>
 
 int main() {
     std::string expression = "(A & (C | D))";
     
-    // Parse the expression into an AST
-    Parser parser(expression);
-    Node* root = parser.parse();
-    
-    // Print the AST
-    std::cout << "AST for expression: " << expression << std::endl;
-    root->print();
-    std::cout << std::endl;
+    booleanExpression expr = booleanExpression(expression);
+    expr.printExpression();
+
+    std::vector<std::vector<bool>> table = expr.generateTruthTable();
+    for (const auto& row : table) {
+        for (bool bit : row) {
+            std::cout << bit << " ";
+        }
+        std::cout << "\n";
+    }
     return 0;
 }

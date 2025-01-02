@@ -77,12 +77,6 @@ private:
      * @return Copied Node
      **/
     Node* copyNode(const Node* other, Node* parent);
-
-    /**
-     * Destroys all dynamically allocated memory associated with the
-     * current booleanExpression.
-     */
-    void clear(Node* &node);
 };
 
 
