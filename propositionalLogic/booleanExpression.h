@@ -46,6 +46,8 @@ public:
      */
     bool evaluate(const std::map<char, bool>& vars) const;
 
+    void printExpression();
+
     /**
      * @return A 2D vector representing the truth table for the
      * AST stored in root. The last column represents a boolean
@@ -54,7 +56,7 @@ public:
      * false and increases as binary does until all variables are 
      * set to true in the bottom row.
      */
-    std::vector<std::vector<bool>> generateTruthTable();
+    std::vector<std::vector<bool>> generateTruthTable() const;
 
 private:
     Node* root; // Root of the Abstract Syntax Tree

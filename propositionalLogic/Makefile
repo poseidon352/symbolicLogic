@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++20 -Wall
 LDFLAGS =
 
-SRC = Parser.cpp Node.cpp main.cpp
+SRC = booleanExpression.cpp Parser.cpp Node.cpp main.cpp
 OBJ = $(SRC:.cpp=.o)
 EXEC = parser
 
