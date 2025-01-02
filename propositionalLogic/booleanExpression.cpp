@@ -1,6 +1,8 @@
 #include "booleanExpression.h"
 #include <bitset>
 #include <algorithm>
+#include <iostream>
+#include <map>
 
 booleanExpression::booleanExpression(std::string &expression) {
     Parser parser(expression);
@@ -53,21 +55,29 @@ bool booleanExpression::evaluate(const std::map<char, bool>& vars) const{
 
 void booleanExpression::printExpression() {
     root->print();
+    std::cout << std::endl;
 }
 
-/** @todo Maybe only have the numer of variables be computed in a method
+/** @todo Maybe only have the variables be computed in a method
  * called here, since it is only used in this method. */ 
 std::vector<std::vector<bool>> booleanExpression::generateTruthTable() const {
     int numOfVars = variables.size();
     int numOfRows = std::pow(2, numOfVars);
     
 
-    std::vector<std::vector<bool>> table(numOfRows, std::vector<bool>(numOfVars));
-    
+    std::vector<std::vector<bool>> table(numOfRows, std::vector<bool>(numOfVars + 1));
+
     for (int row = 0; row < numOfRows; ++row) {
-        std::generate(table[row].begin(), table[row].end(), [row, numOfVars, col = 0]() mutable {
-            return (row >> (numOfVars - ++col)) & 1;
-        });
+        std::map<char, bool> vars;
+        int col = 0;
+        
+        for (char var : variables) {
+            table[row][col] = (row >> (numOfVars - col - 1)) & 1;
+
+            vars[var] = table[row][col];
+            col++;
+        }
+        table[row][col] = root->evaluate(vars);
     }
     
     return table;
