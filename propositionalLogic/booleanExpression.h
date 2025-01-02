@@ -2,7 +2,7 @@
 #define _BOOLEANEXPRESSION_H_
 
 #include "Parser.h"
-
+#include <set>
 
 
 class booleanExpression {
@@ -15,6 +15,7 @@ public:
      * A ~ represents the NOT operator, whose right child is NULL.
      * All other valid symbol (&, |, ->, <->)represents the other 
      * operators, which have non-NULL children.
+     * Inserts all distinct alphabetical characters into variables set
      * 
      * @param expression String representation of expression
      */
@@ -45,9 +46,19 @@ public:
      */
     bool evaluate(const std::map<char, bool>& vars) const;
 
+    /**
+     * @return A 2D vector representing the truth table for the
+     * AST stored in root. The last column represents a boolean
+     * value for each combination of true/false values for variables
+     * given in preceding columns. Top row has all variables set to
+     * false and increases as binary does until all variables are 
+     * set to true in the bottom row.
+     */
+    std::vector<std::vector<bool>> generateTruthTable();
+
 private:
-    // Root of the Abstract Syntax Tree
-    Node* root;
+    Node* root; // Root of the Abstract Syntax Tree
+    std::set<char> variables; // Ordered set of the variables in the AST in alphabetical order
 
     /**
      * Copies the parameter other quadtree into the current booleanExpression.

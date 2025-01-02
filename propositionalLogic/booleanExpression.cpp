@@ -3,8 +3,14 @@
 
 // Constructor
 booleanExpression::booleanExpression(std::string &expression) {
+    // Parse the expression
     Parser parser(expression);
     root = parser.parse();
+
+    // Insert all distinct alphabetical characters to variables set
+    std::copy_if(expression.begin(), expression.end(), 
+                 std::inserter(variables, variables.end()), 
+                 [](char c) { return std::isalpha(c); });
 }
 
 // Copy constructor
@@ -52,4 +58,10 @@ booleanExpression& booleanExpression::operator=(const booleanExpression& rhs) {
 
 bool booleanExpression::evaluate(const std::map<char, bool>& vars) const{
     return root->evaluate(vars);
+}
+
+std::vector<std::vector<bool>> booleanExpression::generateTruthTable() {
+    std::vector<std::vector<bool>> table;
+
+    return table;
 }
