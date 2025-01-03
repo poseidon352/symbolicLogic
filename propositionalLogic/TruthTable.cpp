@@ -6,7 +6,7 @@ TruthTable::TruthTable(Node* &node) : root(node) {
 }
 
 void TruthTable::generateTruthTable() {
-    std::set<char> variables = findVariables();
+    auto variables = findVariables();
     int numOfVars = variables.size();
     int numOfRows = std::pow(2, numOfVars);
     
@@ -44,4 +44,15 @@ void TruthTable::findVariablesHelper(Node* &currNode, std::set<char> &variables)
 }
 
 
-
+std::string TruthTable::toString() const {
+    std::string str;
+    for (const auto& row : table) {
+        for (bool bit : row) {
+            str += bit ? "1" : "0";
+            str += " ";
+        }
+        str.replace(str.size() - 1, 1, "\n");
+    }
+    str.pop_back();
+    return str;
+}
