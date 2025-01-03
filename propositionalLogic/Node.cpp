@@ -38,6 +38,13 @@ Node::~Node() {
     delete right;
 }
 
+bool Node::operator==(const Node& rhs) {
+    if (value != rhs.value) return false;
+    if (left != rhs.left) return false;
+    if (right != rhs.right) return false;
+    return true;
+}
+
 
 std::string Node::toString() const {
     std::string str = "";
