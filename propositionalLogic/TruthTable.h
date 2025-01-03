@@ -1,5 +1,5 @@
-#ifndef _BOOLEANEXPRESSION_H_
-#define _BOOLEANEXPRESSION_H_
+#ifndef _TRUTHTABLE_H_
+#define _TRUTHTABLE_H_
 
 #include "Node.h"
 #include <set>
@@ -10,6 +10,7 @@ public:
 
     TruthTable(Node* &root);
 
+    std::string toString() const;
 
 
 private:

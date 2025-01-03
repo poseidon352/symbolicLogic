@@ -2,12 +2,13 @@
 #define _BOOLEANEXPRESSION_H_
 
 #include "Parser.h"
+#include "TruthTable.h"
 #include <set>
 
 
 class booleanExpression {
 public:
-
+    TruthTable* table;
     /**
      * Constructor that builds a booleanExpression from a given string.
      * Ignoring whitespace, every symbol becomes a Node in the tree.
@@ -46,7 +47,7 @@ public:
      */
     bool evaluate(const std::map<char, bool>& vars) const;
 
-    void printExpression();
+    std::string toString() const;
 
     // /**
     //  * @return A 2D vector representing the truth table for the
@@ -70,13 +71,18 @@ private:
     void copy(const booleanExpression& other);
 
     /**
-     * Private helper function for copy. Recursively copies
+     * Helper method for copy. Recursively copies
      * all of other data into new booleanExpression
      * @param other Node to copy.
      * @param parent parent of the Node to copy
      * @return Copied Node
      **/
     Node* copyNode(const Node* other, Node* parent);
+
+    /**
+     * Helper method for destructor
+     */
+    void clear();
 };
 
 

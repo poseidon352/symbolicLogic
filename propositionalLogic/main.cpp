@@ -6,7 +6,7 @@ int main() {
     std::string expression = "(A & (C | D))";
     
     booleanExpression expr = booleanExpression(expression);
-    expr.printExpression();
+    std::cout << expr.toString() << std::endl;
 
     // std::vector<std::vector<bool>> table = expr.generateTruthTable();
     // for (const auto& row : table) {

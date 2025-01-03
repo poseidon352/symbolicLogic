@@ -40,25 +40,26 @@ Node::~Node() {
 }
 
 
-void Node::print() const {
+std::string Node::toString() const {
+    std::string str = "";
     // Parentheses are not added if Node has NOT or VAR type or has
     // no parent (is the root of the Abstract Syntax Tree)
     bool addParens = (type != NOT && type != VAR) && parent;
     // Print opening parenthesis if needed
-    if (addParens) std::cout << "(";
+    if (addParens) str += "(";
 
     if (left) {
-        left->print();
-        std::cout << " ";
+        str += left->toString() + " ";
     }
-    std::cout << value;
+    str += value;
     if (right) {
         // Spacing not added for NOT type for easier readability
-        if (type != NOT) std::cout << " ";
-        right->print();
+        if (type != NOT) str += " ";
+        str += right->toString();
     }
     // Print closing parenthesis if needed
-    if (addParens) std::cout << ")";
+    if (addParens) str += ")";
+    return str;
 }
 
 

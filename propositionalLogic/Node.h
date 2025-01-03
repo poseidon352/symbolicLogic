@@ -39,7 +39,7 @@ public:
      * Print the value stored in this node and all of its children,
      * adding parentheses and spacing when need for clarity and correctness.
      */
-    void print() const;
+    std::string toString() const;
 
     /**
      * @todo Add documentation for evaluate methods
