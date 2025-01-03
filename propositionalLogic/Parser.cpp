@@ -1,7 +1,6 @@
 #include "Parser.h"
 #include "stack"
 #include <cassert>
-#include <iostream>
 
 Parser::Parser(const std::string& expr) : expr(removeAllWhitespace(expr)) {}
 

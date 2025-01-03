@@ -1,4 +1,3 @@
-
 #include "booleanExpression.h"
 #include <iostream>
 

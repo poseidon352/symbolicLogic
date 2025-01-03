@@ -1,6 +1,5 @@
 
 #include <exception>
-#include <iostream>
 #include <cassert>
 #include "Node.h"
 

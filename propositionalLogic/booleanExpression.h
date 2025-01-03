@@ -3,7 +3,6 @@
 
 #include "Parser.h"
 #include "TruthTable.h"
-#include <set>
 
 
 class booleanExpression {
@@ -49,19 +48,9 @@ public:
 
     std::string toString() const;
 
-    // /**
-    //  * @return A 2D vector representing the truth table for the
-    //  * AST stored in root. The last column represents a boolean
-    //  * value for each combination of true/false values for variables
-    //  * given in preceding columns. Top row has all variables set to
-    //  * false and increases as binary does until all variables are 
-    //  * set to true in the bottom row.
-    //  */
-    // std::vector<std::vector<bool>> generateTruthTable() const;
 
 private:
     Node* root; // Root of the Abstract Syntax Tree
-    // std::set<char> variables; // Ordered set of the variables in the AST in alphabetical order
 
     /**
      * Copies the parameter other quadtree into the current booleanExpression.
