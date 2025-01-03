@@ -2,7 +2,9 @@
 #include <iostream>
 
 int main() {
-    std::string expression = "(A & B & ~C) | (~A & ~B & C)";
+    std::string expression;
+    std::cout << "Enter your expression here: ";
+    std::getline(std::cin, expression);
     
     booleanExpression expr = booleanExpression(expression);
     std::cout << expr.toString() << std::endl;
