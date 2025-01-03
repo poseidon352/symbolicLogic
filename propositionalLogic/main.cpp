@@ -8,12 +8,12 @@ int main() {
     booleanExpression expr = booleanExpression(expression);
     expr.printExpression();
 
-    std::vector<std::vector<bool>> table = expr.generateTruthTable();
-    for (const auto& row : table) {
-        for (bool bit : row) {
-            std::cout << bit << " ";
-        }
-        std::cout << "\n";
-    }
+    // std::vector<std::vector<bool>> table = expr.generateTruthTable();
+    // for (const auto& row : table) {
+    //     for (bool bit : row) {
+    //         std::cout << bit << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
     return 0;
 }

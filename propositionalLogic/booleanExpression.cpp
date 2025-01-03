@@ -7,10 +7,6 @@
 booleanExpression::booleanExpression(std::string &expression) {
     Parser parser(expression);
     root = parser.parse();
-
-    std::copy_if(expression.begin(), expression.end(), 
-                 std::inserter(variables, variables.end()), 
-                 [](char c) { return std::isalpha(c); });
 }
 
 
@@ -58,27 +54,27 @@ void booleanExpression::printExpression() {
     std::cout << std::endl;
 }
 
-/** @todo Maybe only have the variables be computed in a method
- * called here, since it is only used in this method. */ 
-std::vector<std::vector<bool>> booleanExpression::generateTruthTable() const {
-    int numOfVars = variables.size();
-    int numOfRows = std::pow(2, numOfVars);
+// /** @todo Maybe only have the variables be computed in a method
+//  * called here, since it is only used in this method. */ 
+// std::vector<std::vector<bool>> booleanExpression::generateTruthTable() const {
+//     int numOfVars = variables.size();
+//     int numOfRows = std::pow(2, numOfVars);
     
 
-    std::vector<std::vector<bool>> table(numOfRows, std::vector<bool>(numOfVars + 1));
+//     std::vector<std::vector<bool>> table(numOfRows, std::vector<bool>(numOfVars + 1));
 
-    for (int row = 0; row < numOfRows; ++row) {
-        std::map<char, bool> vars;
-        int col = 0;
-        
-        for (char var : variables) {
-            table[row][col] = (row >> (numOfVars - col - 1)) & 1;
+//     for (int row = 0; row < numOfRows; ++row) {
+//         std::map<char, bool> vars;
+//         int col = 0;
 
-            vars[var] = table[row][col];
-            col++;
-        }
-        table[row][col] = root->evaluate(vars);
-    }
+//         for (char var : variables) {
+//             table[row][col] = (row >> (numOfVars - col - 1)) & 1;
+
+//             vars[var] = table[row][col];
+//             col++;
+//         }
+//         table[row][col] = root->evaluate(vars);
+//     }
     
-    return table;
-}
+//     return table;
+// }
