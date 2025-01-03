@@ -39,6 +39,13 @@ Node::~Node() {
     delete right;
 }
 
+bool Node::operator==(const Node& rhs) {
+    if (value != rhs.value) return false;
+    if (left != rhs.left) return false;
+    if (right != rhs.right) return false;
+    return true;
+}
+
 
 void Node::print() const {
     // Parentheses are not added if Node has NOT or VAR type or has
