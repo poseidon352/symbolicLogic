@@ -2,6 +2,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <iostream>
+#include <unordered_set>
 
 FormalProof::FormalProof(Node* root): root(root) {
     setPremiseConclusion();
@@ -12,7 +13,7 @@ void FormalProof::setPremiseConclusion() {
     assert(root && "root has not has not been initialized");
 
     switch (root->type) {
-        case VAR: premise, conclusion = root;
+        case VAR: premise = conclusion = root;
                   break;
         case CON: premise = root->left;
                   conclusion = root->right;
@@ -31,30 +32,133 @@ void FormalProof::prove(Node* currNode) {
 }
 
 void FormalProof::conditionalProof(Node* currNode) {
-    Node* lhs = currNode->left;
-    Node* rhs = currNode->right;
+    // Node* lhs = currNode->left;
+    // Node* rhs = currNode->right;
 
-    assumptions.push_back(lhs);
-    steps.push_back(new Step(lhs, ASSUMPTION, 0));
-    toProve.push(rhs);
-    if (lhs->type == VAR && rhs->type == OR) {
-        lhsVarRhsOr(currNode);
-    }
+    // assumptions.push_back(lhs);
+    // steps.push_back(new Step(lhs, ASSUMPTION, 0));
+    // toProve.push(rhs);
+    // if (lhs->type == VAR && rhs->type == OR) {
+    //     lhsVarRhsOr(currNode);
+    // }
 }
 
 void FormalProof::lhsVarRhsOr(Node* currNode) {
-    Node* varNode = currNode->left;
-    Node* orNode = currNode->right;
+    // Node* varNode = currNode->left;
+    // Node* orNode = currNode->right;
 
-    Step* newStep;
-    if (varNode == orNode->left) {
-        newStep = new Step(orNode, ORintro, 1);
-    }
+    // Step* newStep;
+    // if (varNode == orNode->left) {
+    //     newStep = new Step(orNode, ORintro, 1);
+    // }
 
-    steps.push_back(newStep);
-    if (newStep->expression == toProve.front()) {
-        toProve.pop();
-    }
+    // steps.push_back(newStep);
+    // if (newStep->expression == toProve.front()) {
+    //     toProve.pop();
+    // }
 
     // TODO: Deal with condition that neither are true
+}
+
+
+bool FormalProof::satisfiesRule(const std::vector<Step*> procedure, const Step* lastStep) const {
+    /**
+     * @note All cases will traverse through @param procedure and make sure that any
+     * steps made to support @param lastStep have a depth less than or equal to it.
+     * 
+     * @note This method assumes that all Steps in procedure are valid.
+     */
+
+    switch (lastStep->rule) {
+        case NOTintro: 
+            /**
+             * Check if an assumption equal to right Node of @param lastStep
+             * is made, then a contradiction is found.
+             */
+            return false;
+        case ANDintro:
+            /**
+             * Checks that the left and right Node's of @param lastStep's expression
+             * appear as steps in @param procedure.
+             */
+            return checkANDintro(procedure, lastStep);
+        case ORintro:
+            /**
+             * Checks that either the left or right Node's of @param lastStep's expression
+             * appear as steps in @param procedure.
+             */
+            return false;
+        case CONintro:
+            /**
+             * Check that an assumption equal to the left Node of @param lastStep's expression
+             * is made.
+             */
+            return false;
+        case BICONintro:
+            /**
+             * Check for CONintro in both directions.
+             */
+            return false;
+        case CONTRADICTIONintro:
+            /**
+             * Two Steps exist in procedure, where one is a negation of another.
+             */
+            return false;
+        case NOTelim:
+            /** 
+             * Check if double negation of @param lastStep exists.
+             */
+            return false;
+        case ANDelim:
+            /**
+             * Check that a Step with an AND expression exist containing 
+             * @param lastStep's expression in its left or right Node.
+             */
+            return false;
+        case ORelim:
+            /**
+             * Proof by cases: Check that left and right Nodes of an OR
+             * Node of a Step both result in @param lastStep's expression.
+             */
+            return false;
+        case CONelim:
+            /**
+             * Check that a Step contains @param lastStep's expression
+             * as the antecedent of a CON Node and there is another step
+             * containing the precedent .
+             */
+            return false;
+        case BICONelim:
+            /**
+             * Check that a Step contains @param lastStep's expression
+             * as as a child of a BICON Node and there is another step
+             * containing the other child Node.
+             */
+            return false;
+        case CONTRADICTIONelim:
+            /**
+             * Check that there is a step with a CONTRADICTION expression.
+             */
+            return false;
+        case CONCLUSION:
+            /**
+             * Check that @param lastStep's expresion is equal to 
+             * the conclusion Node* in this class. 
+             */
+            return false;
+        default:
+            throw std::runtime_error("Invalid Rule");
+    }
+}
+
+bool FormalProof::checkANDintro(const std::vector<Step*> procedure, const Step* lastStep) const {
+    std::unordered_set<Node*> toFind = {lastStep->expression->left, lastStep->expression->right};
+    std::unordered_set<Node*> found;
+
+    std::for_each(procedure.begin(), procedure.end(), [&](Step* step) {
+        if (toFind.count(step->expression)) {
+            found.insert(step->expression);
+        }
+    });
+    return found.size() == 2;
 }

@@ -32,9 +32,10 @@ private:
     public:
         Node* expression;
         Rule rule;
+        std::vector<int> supportingSteps;
         int depth;
 
-        Step(Node* expression, Rule rule, int depth);
+        Step(Node* expression, Rule rule, std::vector<int> supportingSteps, int depth);
     
     };
 
@@ -51,6 +52,8 @@ private:
 
    void lhsVarRhsOr(Node* currNode);
 
-   bool satisfiesRule(Rule rule, std::vector<Step*> procedure);
+   bool satisfiesRule(const std::vector<Step*> procedure, const Step* lastStep) const;
+
+   bool checkANDintro(const std::vector<Step*> procedure, const Step* lastStep) const;
 };
 #endif
