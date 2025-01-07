@@ -67,7 +67,5 @@ private:
 
    bool checkNOTelim(const std::vector<Step*> procedure, const Step* lastStep) const;
    bool checkANDelim(const std::vector<Step*> procedure, const Step* lastStep) const;
-
-   Node* negate(Node* expr) const;
 };
 #endif

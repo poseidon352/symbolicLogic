@@ -33,6 +33,26 @@ Node::Node(const std::string& var): value(var), parent(nullptr), left(nullptr), 
     }
 }
 
+/**
+ * @note This constructor does not allow for the creation of Type VAR
+ */
+Node::Node(const Type type, Node* lhs, Node* rhs): type(type), left(lhs), right(rhs) {
+    switch (type) {
+        case NOT: value = "~";
+                  break;
+        case AND: value = "&";
+                  break;
+        case OR: value = "|";
+                  break;
+        case CON: value = "->";
+                  break;
+        case BICON: value = "<->";
+                  break;
+        default: throw InvalidSymbolException("Invalid symbol detected");
+        
+    }
+}
+
 Node::~Node() {
     delete left;
     delete right;
@@ -95,4 +115,8 @@ bool Node::evaluateOperator(const std::map<char, bool>& vars) const {
 bool Node::evaluate(const std::map<char, bool>& vars) const {
     if (type == VAR) return evaluateVariable(vars);
     return evaluateOperator(vars);
+}
+
+Node* Node::negate() {
+    return new Node(NOT, nullptr, this);
 }

@@ -23,8 +23,9 @@ public:
     Node* left;                          // Left child (nullptr for VAR, NOT)
     Node* right;                         // Right child (nullptr for VAR)
 
-    // Node Constructor
+    // Node Constructors
     Node(const std::string& var);
+    Node(const Type type, Node* left, Node* right);
     
     // Node destructor
     ~Node();
@@ -47,6 +48,8 @@ public:
      * @todo Add documentation for evaluate methods
      */
     bool evaluate(const std::map<char, bool>& vars) const;
+
+    Node* negate();
 
 private:
     bool evaluateVariable(const std::map<char, bool>& vars) const;
