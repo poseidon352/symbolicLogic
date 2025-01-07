@@ -36,7 +36,7 @@ Node::Node(const std::string& var): value(var), parent(nullptr), left(nullptr), 
 /**
  * @note This constructor does not allow for the creation of Type VAR
  */
-Node::Node(const Type type, Node* lhs, Node* rhs): type(type), left(lhs), right(rhs) {
+Node::Node(const Type type, Node* lhs, Node* rhs): type(type), parent(nullptr), left(lhs), right(rhs) {
     switch (type) {
         case NOT: value = "~";
                   break;
@@ -50,6 +50,16 @@ Node::Node(const Type type, Node* lhs, Node* rhs): type(type), left(lhs), right(
                   break;
         default: throw InvalidSymbolException("Invalid symbol detected");
         
+    }
+}
+
+Node::Node(const Node& other)
+    : type(other.type), value(other.value), parent(nullptr), left(nullptr), right(nullptr) {
+    if (other.left) {
+        left = new Node(*other.left);
+    }
+    if (other.right) {
+        right = new Node(*other.right);
     }
 }
 
@@ -117,6 +127,6 @@ bool Node::evaluate(const std::map<char, bool>& vars) const {
     return evaluateOperator(vars);
 }
 
-Node* Node::negate() {
-    return new Node(NOT, nullptr, this);
+Node* Node::negate() const {
+    return new Node(NOT, nullptr, new Node(*this));
 }

@@ -49,7 +49,7 @@ public:
      */
     bool evaluate(const std::map<char, bool>& vars) const;
 
-    Node* negate();
+    Node* negate() const;
 
 private:
     bool evaluateVariable(const std::map<char, bool>& vars) const;
