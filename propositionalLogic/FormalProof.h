@@ -39,6 +39,11 @@ private:
     
     };
 
+   /**
+    * @note First Assumption will have depth 0, following steps will have depth 1 when
+    * contained by that assumption.
+    */
+
    Node* root;
    Node* premise;
    Node* conclusion;
@@ -54,6 +59,10 @@ private:
 
    bool satisfiesRule(const std::vector<Step*> procedure, const Step* lastStep) const;
 
+   bool checkNOTintro(const std::vector<Step*> procedure, const Step* lastStep) const;
    bool checkANDintro(const std::vector<Step*> procedure, const Step* lastStep) const;
+   bool checkORintro(const std::vector<Step*> procedure, const Step* lastStep) const;
+   bool checkCONintro(const std::vector<Step*> procedure, const Step* lastStep) const;
+   bool checkCONTRADICTIONintro(const std::vector<Step*> procedure, const Step* lastStep) const;
 };
 #endif

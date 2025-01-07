@@ -87,11 +87,11 @@ bool FormalProof::satisfiesRule(const std::vector<Step*> procedure, const Step* 
              * Checks that either the left or right Node's of @param lastStep's expression
              * appear as steps in @param procedure.
              */
-            return false;
+            return checkORintro(procedure, lastStep);
         case CONintro:
             /**
              * Check that an assumption equal to the left Node of @param lastStep's expression
-             * is made.
+             * is made, then the consequent is proven.
              */
             return false;
         case BICONintro:
@@ -155,10 +155,45 @@ bool FormalProof::checkANDintro(const std::vector<Step*> procedure, const Step* 
     std::unordered_set<Node*> toFind = {lastStep->expression->left, lastStep->expression->right};
     std::unordered_set<Node*> found;
 
+    int lastStepDepth = lastStep->depth;
+
     std::for_each(procedure.begin(), procedure.end(), [&](Step* step) {
-        if (toFind.count(step->expression)) {
+        if (toFind.count(step->expression) && step->depth <= lastStepDepth) {
             found.insert(step->expression);
         }
     });
     return found.size() == 2;
+}
+
+bool FormalProof::checkORintro(const std::vector<Step*> procedure, const Step* lastStep) const {
+    std::unordered_set<Node*> toFind = {lastStep->expression->left, lastStep->expression->right};
+    std::unordered_set<Node*> found;
+
+    int lastStepDepth = lastStep->depth;
+
+    std::for_each(procedure.begin(), procedure.end(), [&](Step* step) {
+        if (toFind.count(step->expression) && step->depth <= lastStepDepth) {
+            found.insert(step->expression);
+        }
+    });
+    return found.size() > 0;
+}
+
+/** 
+ * @todo
+*/
+bool FormalProof::checkCONintro(const std::vector<Step*> procedure, const Step* lastStep) const {
+    Node* antecedent = lastStep->expression->left;
+    Node* consequent = lastStep->expression->right;
+
+    int lastStepDepth = lastStep->depth;
+
+    return false;
+}
+
+/**
+ * @todo
+ */
+bool FormalProof::checkCONTRADICTIONintro(const std::vector<Step*> procedure, const Step* lastStep) const {
+    return false;
 }
