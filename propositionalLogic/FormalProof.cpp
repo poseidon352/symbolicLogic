@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <unordered_set>
+#include <ranges>
 
 FormalProof::FormalProof(Node* root): root(root) {
     setPremiseConclusion();
@@ -151,6 +152,28 @@ bool FormalProof::satisfiesRule(const std::vector<Step*> procedure, const Step* 
     }
 }
 
+/**
+ * @todo Update to fix else if clause to check if step->expression == negate(lastStep->expression)
+ */
+bool FormalProof::checkNOTintro(const std::vector<Step*> procedure, const Step* lastStep) const {
+    bool foundAssumption = false;
+    int lastStepDepth = lastStep->depth;
+
+    for (const auto& step : procedure) {
+        if (foundAssumption) {
+            if (step->depth <= lastStepDepth) {
+                foundAssumption = false;
+            } else if (step->rule == CONTRADICTIONintro) {
+                return true;
+            }
+        } else if (step->depth == lastStepDepth && step->rule == ASSUMPTION && step->expression == lastStep->expression) {
+            foundAssumption = true;
+        }
+    }
+
+    return false;
+}
+
 bool FormalProof::checkANDintro(const std::vector<Step*> procedure, const Step* lastStep) const {
     std::unordered_set<Node*> toFind = {lastStep->expression->left, lastStep->expression->right};
     std::unordered_set<Node*> found;
@@ -158,7 +181,7 @@ bool FormalProof::checkANDintro(const std::vector<Step*> procedure, const Step* 
     int lastStepDepth = lastStep->depth;
 
     std::for_each(procedure.begin(), procedure.end(), [&](Step* step) {
-        if (toFind.count(step->expression) && step->depth <= lastStepDepth) {
+        if (step->depth <= lastStepDepth && toFind.count(step->expression)) {
             found.insert(step->expression);
         }
     });
@@ -172,7 +195,7 @@ bool FormalProof::checkORintro(const std::vector<Step*> procedure, const Step* l
     int lastStepDepth = lastStep->depth;
 
     std::for_each(procedure.begin(), procedure.end(), [&](Step* step) {
-        if (toFind.count(step->expression) && step->depth <= lastStepDepth) {
+        if (step->depth <= lastStepDepth && toFind.count(step->expression)) {
             found.insert(step->expression);
         }
     });
@@ -195,5 +218,29 @@ bool FormalProof::checkCONintro(const std::vector<Step*> procedure, const Step* 
  * @todo
  */
 bool FormalProof::checkCONTRADICTIONintro(const std::vector<Step*> procedure, const Step* lastStep) const {
+    return false;
+}
+
+
+bool FormalProof::checkNOTelim(const std::vector<Step*> procedure, const Step* lastStep) const {
+    for (const auto & step : std::ranges::reverse_view(procedure)) {
+        if (step->depth > lastStep->depth) continue;
+
+        Node* expr = step->expression;
+        // Check if step's expression is a double negation of lastStep's expression
+        if (expr->type == NOT && expr->right->type == NOT && expr->right->right == lastStep->expression)
+            return true;
+    }
+    return false;
+}
+
+bool FormalProof::checkANDelim(const std::vector<Step*> procedure, const Step* lastStep) const {
+    for (const auto & step : std::ranges::reverse_view(procedure)) {
+        if (step->depth > lastStep->depth) continue;
+
+        Node* expr = step->expression;
+        if (expr->type == AND && (expr->left == lastStep->expression || expr->right == lastStep->expression))
+            return true;
+    }
     return false;
 }

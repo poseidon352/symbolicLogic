@@ -64,5 +64,10 @@ private:
    bool checkORintro(const std::vector<Step*> procedure, const Step* lastStep) const;
    bool checkCONintro(const std::vector<Step*> procedure, const Step* lastStep) const;
    bool checkCONTRADICTIONintro(const std::vector<Step*> procedure, const Step* lastStep) const;
+
+   bool checkNOTelim(const std::vector<Step*> procedure, const Step* lastStep) const;
+   bool checkANDelim(const std::vector<Step*> procedure, const Step* lastStep) const;
+
+   Node* negate(Node* expr) const;
 };
 #endif
