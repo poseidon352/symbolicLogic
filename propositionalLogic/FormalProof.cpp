@@ -5,10 +5,22 @@
 #include <unordered_set>
 #include <ranges>
 
-FormalProof::FormalProof(Node* root): root(root) {
+FormalProof::FormalProof(Node* root): root(root), depth(0) {
     setPremiseConclusion();
-    prove(root);
+    if (root->type == CON) {
+        conditionalProof();
+    }
 }
+
+FormalProof::FormalProof(Node* root, int depth): root(root), depth(depth) {
+    setPremiseConclusion();
+    if (root->type == CON) {
+        conditionalProof();
+    }
+}
+
+FormalProof::Step::Step(Node* expression, Rule rule, int depth):
+    expression(expression), rule(rule), depth(depth) {}
 
 void FormalProof::setPremiseConclusion() {
     assert(root && "root has not has not been initialized");
@@ -25,40 +37,32 @@ void FormalProof::setPremiseConclusion() {
     }
 }
 
-void FormalProof::prove(Node* currNode) {
-    if (root->type == CON) {
-        conditionalProof(currNode);
+void FormalProof::conditionalProof() {
+    toProve.push(root->right);
+
+    Step* assumption;
+    if (steps.empty()) {
+        assumption = new Step(root->left, ASSUMPTION, 0);
     }
 
+    steps.push_back(assumption);
+    assumptions.push_back(assumption);
+
+    prove();
 }
 
-void FormalProof::conditionalProof(Node* currNode) {
-    // Node* lhs = currNode->left;
-    // Node* rhs = currNode->right;
+void FormalProof::prove() {
+    while (!toProve.empty()) {
+        Node* goal = toProve.front();
 
-    // assumptions.push_back(lhs);
-    // steps.push_back(new Step(lhs, ASSUMPTION, 0));
-    // toProve.push(rhs);
-    // if (lhs->type == VAR && rhs->type == OR) {
-    //     lhsVarRhsOr(currNode);
-    // }
+        if (goal->type == OR) {
+            proveOR();
+        }
+    }
 }
 
-void FormalProof::lhsVarRhsOr(Node* currNode) {
-    // Node* varNode = currNode->left;
-    // Node* orNode = currNode->right;
+void FormalProof::proveOR() {
 
-    // Step* newStep;
-    // if (varNode == orNode->left) {
-    //     newStep = new Step(orNode, ORintro, 1);
-    // }
-
-    // steps.push_back(newStep);
-    // if (newStep->expression == toProve.front()) {
-    //     toProve.pop();
-    // }
-
-    // TODO: Deal with condition that neither are true
 }
 
 
@@ -141,12 +145,6 @@ bool FormalProof::satisfiesRule(const std::vector<Step*> procedure, const Step* 
              * Check that there is a step with a CONTRADICTION expression.
              */
             return false;
-        case CONCLUSION:
-            /**
-             * Check that @param lastStep's expresion is equal to 
-             * the conclusion Node* in this class. 
-             */
-            return false;
         default:
             throw std::runtime_error("Invalid Rule");
     }
@@ -163,14 +161,14 @@ bool FormalProof::checkNOTintro(const std::vector<Step*> procedure, const Step* 
         if (foundAssumption) {
             if (step->depth <= lastStepDepth) {
                 foundAssumption = false;
-            } else if (step->rule == CONTRADICTIONintro) {
+            } else if (step->depth == lastStepDepth + 1 && step->rule == CONTRADICTIONintro) {
                 return true;
             }
-        } else if (step->depth == lastStepDepth && step->rule == ASSUMPTION && step->expression == lastStep->expression) {
+        } else if (step->depth == lastStepDepth && step->rule == ASSUMPTION && 
+                   lastStep->expression->type == NOT && lastStep->expression->right == step->expression) {
             foundAssumption = true;
         }
     }
-
     return false;
 }
 

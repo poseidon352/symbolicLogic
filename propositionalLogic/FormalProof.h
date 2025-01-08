@@ -17,25 +17,24 @@ enum Rule {
     CONelim,
     BICONelim,
     CONTRADICTIONelim,
-    ASSUMPTION,
-    CONCLUSION
+    ASSUMPTION
 };
 
 class FormalProof {
 public:
     FormalProof(Node* root);
+    FormalProof(Node* root, int depth);
 
-    void prove(Node* currNode);
+    void prove();
 
 private:
     class Step {
     public:
         Node* expression;
         Rule rule;
-        std::vector<int> supportingSteps;
         int depth;
 
-        Step(Node* expression, Rule rule, std::vector<int> supportingSteps, int depth);
+        Step(Node* expression, Rule rule, int depth);
     
     };
 
@@ -47,15 +46,16 @@ private:
    Node* root;
    Node* premise;
    Node* conclusion;
+   int depth;
    std::vector<Step*> steps;
-   std::vector<Node*> assumptions;
+   std::vector<Step*> assumptions;
    std::queue<Node*> toProve;
 
    void setPremiseConclusion();
 
-   void conditionalProof(Node* currNode);
+   void conditionalProof();
 
-   void lhsVarRhsOr(Node* currNode);
+   void proveOR();
 
    bool satisfiesRule(const std::vector<Step*> procedure, const Step* lastStep) const;
 
